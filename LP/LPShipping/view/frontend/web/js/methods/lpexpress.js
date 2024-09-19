@@ -14,6 +14,7 @@ define([
     });
 
     var terminalsSelectInitializedForCountry = null;
+
     function initSelectOptions($select, selectedCountryCode) {
         $select.empty();
         $select.append('<option value="" disabled selected hidden>' + $.mage.__('Please select terminal..') + '</option>');
@@ -21,12 +22,12 @@ define([
         $.each(window.checkoutConfig.terminal.list, function (country, countryTerminals) {
             if (selectedCountryCode && country.toUpperCase() === selectedCountryCode) {
                 $.each(countryTerminals, function (city, cityTerminals) {
-                    $select.append('<optgroup label="' + city + '"></optgroup>');
+                    var $optgroup = $('<optgroup label="' + city + '"></optgroup>');
                     $.each(cityTerminals, function (id, terminal) {
-                        let $optgroup = $select.find('optgroup[label="' + city + '"]');
                         $optgroup.append('<option value="' + id + '">' + terminal + '</option>');
-                    })
-                })
+                    });
+                    $select.append($optgroup);
+                });
             }
         });
     }
@@ -35,9 +36,48 @@ define([
         let $lpExpressTerminalList = $('#lpexpress-terminal-list');
         if ($lpExpressTerminalList.length) {
             initSelectOptions($lpExpressTerminalList, selectedCountryCode);
-            $lpExpressTerminalList.select2();
+
+            // Custom matcher function for searching optgroup and options
+            $lpExpressTerminalList.select2({
+                matcher: function (params, data) {
+                    // If no search term, return the data unchanged
+                    if ($.trim(params.term) === '') {
+                        return data;
+                    }
+
+                    // Convert the search term and data to uppercase for case-insensitive comparison
+                    var searchTerm = params.term.toUpperCase();
+                    var optgroupLabel = (data.text || '').toUpperCase();
+
+                    // Check if the optgroup label matches the search term
+                    if (optgroupLabel.indexOf(searchTerm) > -1) {
+                        return data;  // Return the entire optgroup if it matches
+                    }
+
+                    // If data has children (meaning it's an optgroup)
+                    if (data.children) {
+                        var filteredChildren = [];
+                        $.each(data.children, function (idx, child) {
+                            var childText = (child.text || '').toUpperCase();
+                            if (childText.indexOf(searchTerm) > -1) {
+                                filteredChildren.push(child);
+                            }
+                        });
+
+                        if (filteredChildren.length) {
+                            var modifiedData = $.extend({}, data, true);
+                            modifiedData.children = filteredChildren;
+                            return modifiedData;
+                        }
+                    }
+
+                    // If no match is found, return null
+                    return null;
+                }
+            });
         }
     }
+
     return Select.extend({
         initialize: function () {
             let self = this;
@@ -58,7 +98,7 @@ define([
         selectedMethod: function () {
             let method = quote.shippingMethod();
 
-            // if is selected method
+            // if selected method
             if (method) {
                 // Hide or show terminal validation error
                 $('div[name="shippingAddress.lpexpress_terminal"] .field-error')
