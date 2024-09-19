@@ -98,8 +98,11 @@ class ShippingHelper extends AbstractHelper
         return substr($shippingMethod, 4);
     }
 
-    public static function isTerminalShippingMethod(string $shippingMethod): bool
+    public static function isTerminalShippingMethod(?string $shippingMethod): bool
     {
+        if ($shippingMethod === null) {
+            return false;
+        }
         return in_array($shippingMethod, CheckoutProvider::TERMINAL_SHIPPING_METHODS, true);
     }
 
