@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">lp_shipping_listing.lp_shipping_listing_data_source</item>
+            <item name="deps" xsi:type="string">lp_shipping_listing.lp_shipping_listing_data_source</item>
+        </item>
+        <item name="spinner" xsi:type="string">lp_shipping_listing_columns</item>
+    </argument>
+    <dataSource name="lp_shipping_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">entity_id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider"
+                      name="lp_shipping_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>entity_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <button name="all_orders">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="buttonClasses" xsi:type="string">lp-filter-button</item>
+                <item name="actions" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="targetName" xsi:type="string">NONE</item>
+                        <item name="actionName" xsi:type="string">NONE</item>
+                    </item>
+                </item>
+            </item>
+        </argument>
+        <settings>
+            <displayAsLink>true</displayAsLink>
+            <title translate="true">All orders</title>
+        </settings>
+    </button>
+    <button name="new_orders">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="buttonClasses" xsi:type="string">lp-filter-button</item>
+                <item name="actions" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="targetName" xsi:type="string">NONE</item>
+                        <item name="actionName" xsi:type="string">NONE</item>
+                    </item>
+                </item>
+            </item>
+        </argument>
+        <settings>
+            <displayAsLink>true</displayAsLink>
+            <title translate="true">New orders</title>
+        </settings>
+    </button>
+    <button name="generated_orders">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="buttonClasses" xsi:type="string">lp-filter-button</item>
+                <item name="actions" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="targetName" xsi:type="string">NONE</item>
+                        <item name="actionName" xsi:type="string">NONE</item>
+                    </item>
+                </item>
+            </item>
+        </argument>
+        <settings>
+            <displayAsLink>true</displayAsLink>
+            <title translate="true">Generated orders</title>
+        </settings>
+    </button>
+    <button name="courier_called">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="buttonClasses" xsi:type="string">lp-filter-button</item>
+                <item name="actions" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="targetName" xsi:type="string">NONE</item>
+                        <item name="actionName" xsi:type="string">NONE</item>
+                    </item>
+                </item>
+            </item>
+        </argument>
+        <settings>
+            <displayAsLink>true</displayAsLink>
+            <title translate="true">Courier Called</title>
+        </settings>
+    </button>
+    <button name="completed_orders">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="buttonClasses" xsi:type="string">lp-filter-button</item>
+                <item name="actions" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="targetName" xsi:type="string">NONE</item>
+                        <item name="actionName" xsi:type="string">NONE</item>
+                    </item>
+                </item>
+            </item>
+        </argument>
+        <settings>
+            <displayAsLink>true</displayAsLink>
+            <title translate="true">Completed orders</title>
+        </settings>
+    </button>
+    <listingToolbar name="listing_top">
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <filters name="listing_filters">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="templates" xsi:type="array">
+                        <item name="filters" xsi:type="array">
+                            <item name="select" xsi:type="array">
+                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/ui-select</item>
+                                <item name="template" xsi:type="string">ui/grid/filters/elements/ui-select</item>
+                            </item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </filters>
+        <paging name="listing_paging"/>
+        <massaction name="listing_massaction" component="Magento_Ui/js/grid/tree-massactions">
+            <action name="lp_create_shipping_labels">
+                <settings>
+                    <url path="lp_mass/massaction/createshippinglabels"/>
+                    <type>lp_create_shipping_labels</type>
+                    <label translate="true">Create Shipping Labels</label>
+                </settings>
+            </action>
+            <action name="lp_cancel_shipping_labels">
+                <settings>
+                    <url path="lp_mass/massaction/cancelshippinglabels"/>
+                    <type>lp_cancel_shipping_labels</type>
+                    <label translate="true">Cancel Shipping Labels</label>
+                </settings>
+            </action>
+            <action name="lp_call_courier">
+                <settings>
+                    <url path="lp_mass/massaction/callcourier"/>
+                    <type>lp_call_courier</type>
+                    <label translate="true">Call Courier</label>
+                </settings>
+            </action>
+            <action name="lp_print_documents">
+                <settings>
+                    <url path="lp_mass/massaction/printalldocuments"/>
+                    <type>lp_print_documents</type>
+                    <label translate="true">Print All Documents</label>
+                </settings>
+            </action>
+            <action name="lp_print_manifests">
+                <settings>
+                    <url path="lp_mass/massaction/printmanifests"/>
+                    <type>lp_print_manifests</type>
+                    <label translate="true">Print Manifests</label>
+                </settings>
+            </action>
+        </massaction>
+    </listingToolbar>
+    <columns name="lp_shipping_listing_columns">
+        <selectionsColumn name="ids">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="indexField" xsi:type="string">entity_id</item>
+                </item>
+            </argument>
+        </selectionsColumn>
+        <column name="increment_id" class="LP\LPShipping\Ui\Component\Listing\Columns\OrderActions">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Order ID</item>
+                </item>
+            </argument>
+        </column>
+        <column name="customer_name">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Client</label>
+            </settings>
+        </column>
+        <column name="status" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <filter>select</filter>
+                <options class="Magento\Sales\Ui\Component\Listing\Column\Status\Options"/>
+                <dataType>select</dataType>
+                <label translate="true">Status</label>
+            </settings>
+        </column>
+        <column name="details" class="LP\LPShipping\Ui\Component\Listing\Columns\Details">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+                    <item name="label" xsi:type="string" translate="true">Details</item>
+                    <item name="sortable" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        </column>
+        <column name="shipping_information">
+            <settings>
+                <label translate="true">Shipping plan</label>
+            </settings>
+        </column>
+        <column name="tracking" class="LP\LPShipping\Ui\Component\Listing\Columns\Tracking">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+                    <item name="label" xsi:type="string" translate="true">Tracking</item>
+                    <item name="sortable" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        </column>
+        <column name="lp_manifest_created" class="Magento\Ui\Component\Listing\Columns\Date"
+                component="Magento_Ui/js/grid/columns/date">
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <label translate="true">Manifest Date</label>
+            </settings>
+        </column>
+        <column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date"
+                component="Magento_Ui/js/grid/columns/date">
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <label translate="true">Purchase Date</label>
+            </settings>
+        </column>
+        <actionsColumn name="actions" class="LP\LPShipping\Ui\Component\Listing\Columns\PrintLabelActions">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="viewUrlPath" xsi:type="string">adminhtml/order_shipment/printLabel</item>
+                    <item name="urlEntityParamName" xsi:type="string">shipment_id</item>
+                </item>
+            </argument>
+            <settings>
+                <indexField>entity_id</indexField>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>

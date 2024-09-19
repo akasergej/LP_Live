@@ -1,0 +1,556 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="carriers" translate="label" type="text" sortOrder="320" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="lpcarrier" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Unisend</label>
+                <field id="status_label" translate="label" type="label" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Status</label>
+                    <comment model="\LP\LPShipping\Model\Config\Source\ModuleStatus" />
+                </field>
+                <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="available_services" type="select" translate="label" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Available Services</label>
+                    <source_model>LP\LPShipping\Model\Config\Source\AvailableServices</source_model>
+                </field>
+                <group id="lpcarrierapi" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <attribute type="expanded">1</attribute>
+                    <label>Authorization Settings</label>
+                    <field id="api_login" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Username</label>
+                    </field>
+                    <field id="api_password" translate="label" type="password" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Password</label>
+                    </field>
+                </group>
+                <group id="lpcarriersender" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <depends>
+                        <field id="*/*/status">1</field>
+                    </depends>
+                    <attribute type="expanded">1</attribute>
+                    <label>Sender Information</label>
+                    <field id="sender_name" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Name</label>
+                        <validate>validate-length maximum-length-100</validate>
+                        <comment>Maximum length: 100 characters</comment>
+                    </field>
+                    <field id="sender_phone" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Phone</label>
+                        <validate>validate-phone-number</validate>
+                        <comment model="\LP\LPShipping\Model\Config\Source\PhoneNumberComment" />
+                    </field>
+                    <field id="sender_email" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Email</label>
+                        <validate>validate-email validate-length maximum-length-128</validate>
+                        <comment>Maximum length: 128 characters</comment>
+                    </field>
+                    <field id="sender_country" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Country</label>
+                        <source_model>LP\LPShipping\Model\Config\Source\AvailableCountries</source_model>
+                    </field>
+                    <field id="sender_city" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>City</label>
+                        <validate>validate-length maximum-length-35</validate>
+                        <comment>Maximum length: 35 characters</comment>
+                    </field>
+                    <field id="sender_street" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <depends>
+                            <field id="sender_country">118</field>
+                        </depends>
+                        <label>Street</label>
+                        <validate>validate-length maximum-length-50</validate>
+                        <comment>Maximum length: 50 characters, enter only street address data e.g. Jasinskio g.</comment>
+                    </field>
+                    <field id="sender_building_number" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <depends>
+                            <field id="sender_country">118</field>
+                        </depends>
+                        <label>Building Number</label>
+                        <validate>validate-length maximum-length-20</validate>
+                        <comment>Maximum length: 20 characters</comment>
+                    </field>
+                    <field id="sender_apartment_number" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <depends>
+                            <field id="sender_country">118</field>
+                        </depends>
+                        <label>Apartment Number</label>
+                        <validate>validate-length maximum-length-20</validate>
+                        <comment>Maximum length: 20 characters</comment>
+                    </field>
+                    <field id="sender_address_line_1" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <depends>
+                            <field id="sender_country" separator="|">169|229</field>
+                        </depends>
+                        <label>Address line 1</label>
+                        <validate>validate-length maximum-length-100</validate>
+                        <comment>Maximum length: 100 characters</comment>
+                    </field>
+                    <field id="sender_address_line_2" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <depends>
+                            <field id="sender_country" separator="|">169|229</field>
+                        </depends>
+                        <label>Address line 2</label>
+                        <validate>validate-length maximum-length-100</validate>
+                        <comment>Maximum length: 100 characters</comment>
+                    </field>
+                    <field id="sender_postcode" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Post Code</label>
+                    </field>
+                    <field id="warehouse_same_as_sender" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Warehouse address is same as sender</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                </group>
+                <group id="warehouse" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <depends>
+                        <field id="carriers/lpcarrier/lpcarriersender/warehouse_same_as_sender">0</field>
+                    </depends>
+                    <attribute type="expanded">1</attribute>
+                    <label>Warehouse Information</label>
+                    <field id="name" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Name</label>
+                        <validate>validate-length maximum-length-100</validate>
+                        <comment>Maximum length: 100 characters</comment>
+                    </field>
+                    <field id="phone" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Phone</label>
+                        <validate>validate-phone-number</validate>
+                        <comment model="\LP\LPShipping\Model\Config\Source\PhoneNumberComment" />
+                    </field>
+                    <field id="email" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Email</label>
+                        <validate>validate-email validate-length maximum-length-128</validate>
+                        <comment>Maximum length: 128 characters</comment>
+                    </field>
+                    <field id="country" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Country</label>
+                        <source_model>LP\LPShipping\Model\Config\Source\AvailableCountries</source_model>
+                    </field>
+                    <field id="city" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>City</label>
+                        <validate>validate-length maximum-length-35</validate>
+                        <comment>Maximum length: 35 characters</comment>
+                    </field>
+                    <field id="street" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <depends>
+                            <field id="country">118</field>
+                        </depends>
+                        <label>Street</label>
+                        <validate>validate-length maximum-length-50</validate>
+                        <comment>Maximum length: 50 characters, enter only street address data e.g. Jasinskio g.</comment>
+                    </field>
+                    <field id="building_number" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <depends>
+                            <field id="country">118</field>
+                        </depends>
+                        <label>Building Number</label>
+                        <validate>validate-length maximum-length-20</validate>
+                        <comment>Maximum length: 20 characters</comment>
+                    </field>
+                    <field id="apartment_number" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <depends>
+                            <field id="country">118</field>
+                        </depends>
+                        <label>Apartment Number</label>
+                        <validate>validate-length maximum-length-20</validate>
+                        <comment>Maximum length: 20 characters</comment>
+                    </field>
+                    <field id="address_line_1" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <depends>
+                            <field id="country" separator="|">169|229</field>
+                        </depends>
+                        <label>Address line 1</label>
+                        <validate>validate-length maximum-length-100</validate>
+                        <comment>Maximum length: 100 characters</comment>
+                    </field>
+                    <field id="address_line_2" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <depends>
+                            <field id="country" separator="|">169|229</field>
+                        </depends>
+                        <label>Address line 2</label>
+                        <validate>validate-length maximum-length-100</validate>
+                        <comment>Maximum length: 100 characters</comment>
+                    </field>
+                    <field id="postcode" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Post Code</label>
+                    </field>
+                </group>
+                <group id="lpcarriershipping_lp" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="0" showInStore="0">
+
+                    <label>Lithuanian Post Delivery Settings</label>
+                    <depends>
+                        <field id="*/*/available_services" separator=",">0,1</field>
+                        <field id="*/*/status">1</field>
+                        <field id="*/*/sender_status">1</field>
+                    </depends>
+                    <field id="allowedmethods" type="multiselect" translate="label" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Delivery Methods Lithuanian Post</label>
+                        <source_model>LP\LPShipping\Model\Config\Source\LPDeliveryMethods</source_model>
+                        <comment>Press "CTRL" button on your keyboard to select multiple or deselect</comment>
+                        <can_be_empty>1</can_be_empty>
+                    </field>
+                    <field id="import_rates" translate="label" type="LP\LPShipping\Block\Adminhtml\Form\Field\Import" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Import pricing table by weight and/or country</label>
+                        <backend_model>LP\LPShipping\Model\Config\Backend\LPTableRates\Rates</backend_model>
+                    </field>
+                    <field id="export_rates" translate="label" type="LP\LPShipping\Block\Adminhtml\Form\Field\Export" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Export pricing table by weight and/or country</label>
+                        <comment>If you have not yet uploaded any prices, you can still use this button to download required csv format file.</comment>
+                    </field>
+                    <group id="P2H_UNTRACKED_pricing" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Shipment from the post office to the receiver's address/post office configuration</label>
+                        <field id="P2H_UNTRACKED_title_lt" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for LT</label>
+                        </field>
+                        <field id="P2H_UNTRACKED_title_lv" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for LV</label>
+                        </field>
+                        <field id="P2H_UNTRACKED_title_et" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for EE</label>
+                        </field>
+                        <field id="P2H_UNTRACKED_title_en" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for EN</label>
+                        </field>
+                        <field id="P2H_UNTRACKED_price" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Delivery Price</label>
+                            <validate>validate-number validate-zero-or-greater</validate>
+                            <comment>Leave empty if you want to use Price vs Weight table.</comment>
+                        </field>
+                        <field id="P2H_UNTRACKED_free_shipping" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Free from</label>
+                            <validate>validate-number validate-zero-or-greater</validate>
+                            <comment>Order sum after which shipping will be free</comment>
+                        </field>
+                        <field id="P2H_UNTRACKED_delivery_time" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Delivery time</label>
+                            <comment>Example: 4 d.d.</comment>
+                        </field>
+                        <field id="P2H_UNTRACKED_delivery_size" type="select" translate="label" sortOrder="6" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Default shipment size</label>
+                            <source_model>LP\LPShipping\Model\Config\Source\LPSmallPackageSizes</source_model>
+                        </field>
+                    </group>
+                    <group id="P2H_TRACKED_pricing" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Shipment from the post office to the receiver's address without a signature configuration</label>
+                        <field id="P2H_TRACKED_title_lt" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for LT</label>
+                        </field>
+                        <field id="P2H_TRACKED_title_lv" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for LV</label>
+                        </field>
+                        <field id="P2H_TRACKED_title_et" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for EE</label>
+                        </field>
+                        <field id="P2H_TRACKED_title_en" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for EN</label>
+                        </field>
+                        <field id="P2H_TRACKED_price" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Delivery Price</label>
+                            <validate>validate-number validate-zero-or-greater</validate>
+                            <comment>Leave empty if you want to use Price vs Weight table.</comment>
+                        </field>
+                        <field id="P2H_TRACKED_free_shipping" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Free from</label>
+                            <validate>validate-number validate-zero-or-greater</validate>
+                            <comment>Order sum after which shipping will be free</comment>
+                        </field>
+                        <field id="P2H_TRACKED_delivery_time" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Delivery time</label>
+                            <comment>Example: 4 d.d.</comment>
+                        </field>
+                        <field id="P2H_TRACKED_delivery_size" type="select" translate="label" sortOrder="6" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Default shipment size</label>
+                            <source_model>LP\LPShipping\Model\Config\Source\LPSmallPackageSizes</source_model>
+                        </field>
+                    </group>
+                    <group id="P2H_SIGNED_pricing" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Shipment from the post office to the receiver's address/post office with signature configuration</label>
+                        <field id="P2H_SIGNED_title_lt" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for LT</label>
+                        </field>
+                        <field id="P2H_SIGNED_title_lv" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for LV</label>
+                        </field>
+                        <field id="P2H_SIGNED_title_et" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for EE</label>
+                        </field>
+                        <field id="P2H_SIGNED_title_en" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for EN</label>
+                        </field>
+                        <field id="P2H_SIGNED_price" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Delivery Price</label>
+                            <validate>validate-number validate-zero-or-greater</validate>
+                            <comment>Leave empty if you want to use Price vs Weight table.</comment>
+                        </field>
+                        <field id="P2H_SIGNED_free_shipping" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Free from</label>
+                            <validate>validate-number validate-zero-or-greater</validate>
+                            <comment>Order sum after which shipping will be free</comment>
+                        </field>
+                        <field id="P2H_SIGNED_delivery_time" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Delivery time</label>
+                            <comment>Example: 4 d.d.</comment>
+                        </field>
+                        <field id="P2H_SIGNED_delivery_size" type="select" translate="label" sortOrder="6" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Default shipment size</label>
+                            <source_model>LP\LPShipping\Model\Config\Source\LPPackageSizes</source_model>
+                        </field>
+                    </group>
+                </group>
+                <group id="lpcarriershipping_lpexpress" translate="label" type="text" sortOrder="7" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <depends>
+                        <field id="*/*/available_services" separator=",">0,2</field>
+                        <field id="*/*/status">1</field>
+                        <field id="*/*/sender_status">1</field>
+                    </depends>
+                    <label>Unisend Delivery Settings</label>
+                    <field id="allowedmethods" type="multiselect" translate="label" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Delivery Methods Unisend</label>
+                        <source_model>LP\LPShipping\Model\Config\Source\LPExpressDeliveryMethods</source_model>
+                        <comment>Press "CTRL" button on your keyboard to select multiple or deselect</comment>
+                        <can_be_empty>1</can_be_empty>
+                    </field>
+                    <field id="import_rates" translate="label" type="LP\LPShipping\Block\Adminhtml\Form\Field\Import" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Import pricing table by weight and/or country</label>
+                        <backend_model>LP\LPShipping\Model\Config\Backend\LPExpressTableRates\Rates</backend_model>
+                    </field>
+                    <field id="export_rates" translate="label" type="LP\LPShipping\Block\Adminhtml\Form\Field\Export" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Export pricing table by weight and/or country</label>
+                        <comment>If you have not yet uploaded any prices, you can still use this button to download required csv format file.</comment>
+                    </field>
+                    <field id="call_courier_automatically" type="select" translate="label" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Call Courier Automatically</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="courier_arrival_time" translate="label" type="time" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <depends>
+                            <field id="call_courier_automatically">1</field>
+                        </depends>
+                        <label>Courier arrival time</label>
+                    </field>
+                    <group id="H2H_HANDS_pricing" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Shipment from home/office delivered by UNISEND courier to the receiver's address configuration</label>
+                        <field id="H2H_HANDS_title_lt" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for LT</label>
+                        </field>
+                        <field id="H2H_HANDS_title_lv" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for LV</label>
+                        </field>
+                        <field id="H2H_HANDS_title_et" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for EE</label>
+                        </field>
+                        <field id="H2H_HANDS_title_en" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for EN</label>
+                        </field>
+                        <field id="H2H_HANDS_price" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Delivery Price</label>
+                            <validate>validate-number validate-zero-or-greater</validate>
+                            <comment>Leave empty if you want to use Price vs Weight table.</comment>
+                        </field>
+                        <field id="H2H_HANDS_free_shipping" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Free from</label>
+                            <validate>validate-number validate-zero-or-greater</validate>
+                            <comment>Order sum after which shipping will be free</comment>
+                        </field>
+                        <field id="H2H_HANDS_delivery_time" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Delivery time</label>
+                            <comment>Example: 4 d.d.</comment>
+                        </field>
+                    </group>
+                    <group id="T2H_HANDS_pricing" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Shipment from UNISEND self-service terminal/locker, delivered by UNISEND courier to the receiver's address configuration</label>
+                        <field id="T2H_HANDS_title_lt" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for LT</label>
+                        </field>
+                        <field id="T2H_HANDS_title_lv" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for LV</label>
+                        </field>
+                        <field id="T2H_HANDS_title_et" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for EE</label>
+                        </field>
+                        <field id="T2H_HANDS_title_en" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for EN</label>
+                        </field>
+                        <field id="T2H_HANDS_price" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Delivery Price</label>
+                            <validate>validate-number validate-zero-or-greater</validate>
+                            <comment>Leave empty if you want to use Price vs Weight table.</comment>
+                        </field>
+                        <field id="T2H_HANDS_free_shipping" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Free from</label>
+                            <validate>validate-number validate-zero-or-greater</validate>
+                            <comment>Order sum after which shipping will be free</comment>
+                        </field>
+                        <field id="T2H_HANDS_delivery_time" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Delivery time</label>
+                            <comment>Example: 4 d.d.</comment>
+                        </field>
+                        <field id="T2H_HANDS_delivery_size" type="select" translate="label" sortOrder="6" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Default shipment size</label>
+                            <source_model>LP\LPShipping\Model\Config\Source\UnisendPackageSizes</source_model>
+                        </field>
+                    </group>
+                    <group id="T2T_TERMINAL_pricing" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Shipment from and to UNISEND self-service terminal/ locker configuration</label>
+                        <field id="T2T_TERMINAL_title_lt" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for LT</label>
+                        </field>
+                        <field id="T2T_TERMINAL_title_lv" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for LV</label>
+                        </field>
+                        <field id="T2T_TERMINAL_title_et" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for EE</label>
+                        </field>
+                        <field id="T2T_TERMINAL_title_en" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for EN</label>
+                        </field>
+                        <field id="T2T_TERMINAL_price" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Delivery Price</label>
+                            <validate>validate-number validate-zero-or-greater</validate>
+                            <comment>Leave empty if you want to use Price vs Weight table.</comment>
+                        </field>
+                        <field id="T2T_TERMINAL_free_shipping" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Free from</label>
+                            <validate>validate-number validate-zero-or-greater</validate>
+                            <comment>Order sum after which shipping will be free</comment>
+                        </field>
+                        <field id="T2T_TERMINAL_delivery_time" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Delivery time</label>
+                            <comment>Example: 4 d.d.</comment>
+                        </field>
+                        <field id="T2T_TERMINAL_delivery_size" type="select" translate="label" sortOrder="6" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Default shipment size</label>
+                            <source_model>LP\LPShipping\Model\Config\Source\UnisendPackageSizes</source_model>
+                        </field>
+                    </group>
+                    <group id="H2T_TERMINAL_pricing" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Shipment from home/office delivered to UNISEND self-service terminal/ locker configuration</label>
+                        <field id="H2T_TERMINAL_title_lt" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for LT</label>
+                        </field>
+                        <field id="H2T_TERMINAL_title_lv" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for LV</label>
+                        </field>
+                        <field id="H2T_TERMINAL_title_et" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for EE</label>
+                        </field>
+                        <field id="H2T_TERMINAL_title_en" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for EN</label>
+                        </field>
+                        <field id="H2T_TERMINAL_price" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Delivery Price</label>
+                            <validate>validate-number validate-zero-or-greater</validate>
+                            <comment>Leave empty if you want to use Price vs Weight table.</comment>
+                        </field>
+                        <field id="H2T_TERMINAL_free_shipping" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Free from</label>
+                            <validate>validate-number validate-zero-or-greater</validate>
+                            <comment>Order sum after which shipping will be free</comment>
+                        </field>
+                        <field id="H2T_TERMINAL_delivery_time" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Delivery time</label>
+                            <comment>Example: 4 d.d.</comment>
+                        </field>
+                        <field id="H2T_TERMINAL_delivery_size" type="select" translate="label" sortOrder="6" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Default shipment size</label>
+                            <source_model>LP\LPShipping\Model\Config\Source\UnisendPackageSizes</source_model>
+                        </field>
+                    </group>
+                    <group id="T2S_TERMINAL_pricing" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Shipment from and to UNISEND self-service terminal/ locker within 72 hours configuration</label>
+                        <field id="T2S_TERMINAL_title_lt" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for LT</label>
+                        </field>
+                        <field id="T2S_TERMINAL_title_lv" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for LV</label>
+                        </field>
+                        <field id="T2S_TERMINAL_title_et" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for EE</label>
+                        </field>
+                        <field id="T2S_TERMINAL_title_en" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for EN</label>
+                        </field>
+                        <field id="T2S_TERMINAL_price" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Delivery Price</label>
+                            <validate>validate-number validate-zero-or-greater</validate>
+                            <comment>Leave empty if you want to use Price vs Weight table.</comment>
+                        </field>
+                        <field id="T2S_TERMINAL_free_shipping" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Free from</label>
+                            <validate>validate-number validate-zero-or-greater</validate>
+                            <comment>Order sum after which shipping will be free</comment>
+                        </field>
+                        <field id="T2S_TERMINAL_delivery_time" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Delivery time</label>
+                            <comment>Example: 4 d.d.</comment>
+                        </field>
+                        <field id="T2S_TERMINAL_delivery_size" type="select" translate="label" sortOrder="6" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Default shipment size</label>
+                            <source_model>LP\LPShipping\Model\Config\Source\UnisendPackageSizes</source_model>
+                        </field>
+                    </group>
+                    <group id="H2P_TRACKED_SIGNED_pricing" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Shipment from home/office delivered to the receiver's post office configuration</label>
+                        <field id="H2P_TRACKED_SIGNED_title_lt" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for LT</label>
+                        </field>
+                        <field id="H2P_TRACKED_SIGNED_title_lv" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for LV</label>
+                        </field>
+                        <field id="H2P_TRACKED_SIGNED_title_et" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for EE</label>
+                        </field>
+                        <field id="H2P_TRACKED_SIGNED_title_en" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Title for EN</label>
+                        </field>
+                        <field id="H2P_TRACKED_SIGNED_price" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Delivery Price</label>
+                            <validate>validate-number validate-zero-or-greater</validate>
+                            <comment>Leave empty if you want to use Price vs Weight table.</comment>
+                        </field>
+                        <field id="H2P_TRACKED_SIGNED_free_shipping" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Free from</label>
+                            <validate>validate-number validate-zero-or-greater</validate>
+                            <comment>Order sum after which shipping will be free</comment>
+                        </field>
+                        <field id="H2P_TRACKED_SIGNED_delivery_time" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
+                            <label>Delivery time</label>
+                            <comment>Example: 4 d.d.</comment>
+                        </field>
+                    </group>
+                </group>
+                <group id="lpcarriershipping_other_settings" translate="label" type="text" sortOrder="7" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <depends>
+                        <field id="*/*/status">1</field>
+                    </depends>
+                    <label>Other Settings</label>
+                    <field id="label_format" type="select" translate="label" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Label Format</label>
+                        <source_model>LP\LPShipping\Model\Config\Source\LabelFormat</source_model>
+                    </field>
+                    <field id="label_orientation" type="select" translate="label" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Label orientation</label>
+                        <source_model>LP\LPShipping\Model\Config\Source\LabelOrientation</source_model>
+                    </field>
+                    <field id="send_return_label" type="select" translate="label" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Send return label</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                </group>
+                <field id="status" translate="label" type="hidden" sortOrder="999" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <depends> <!-- just hidden field adding random depend value so the scope will be hidden -->
+                        <field id="*/*/available_services">3</field>
+                    </depends>
+                </field>
+                <field id="sender_status" translate="label" type="hidden" sortOrder="999" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <depends> <!-- just hidden field adding random depend value so the scope will be hidden -->
+                        <field id="*/*/available_services">3</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

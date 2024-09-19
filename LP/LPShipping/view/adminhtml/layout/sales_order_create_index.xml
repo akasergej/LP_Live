@@ -1,0 +1,9 @@
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="shipping_method">
+            <block class="LP\LPShipping\Block\Adminhtml\Order\Create\Terminal"
+                   template="LP_LPShipping::order_create_shipping_terminal.phtml"
+                   after="-" />
+        </referenceBlock>
+    </body>
+</page>

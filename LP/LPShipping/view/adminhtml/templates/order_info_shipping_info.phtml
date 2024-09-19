@@ -1,0 +1,13 @@
+<div id="lpexpress-block">
+    <strong><?=$block->getMethodName() ?></strong>
+    <span class="price"><?=$block->getMethodInfo() ?></span>
+</div>
+<script type="text/javascript">
+    require(
+        ['jquery'],
+        function($) {
+            var element = $('#lpexpress-block').detach();
+            $('.order-shipping-method').append(element);
+        }
+    );
+</script>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <listingToolbar name="listing_top">
+        <massaction name="listing_massaction" component="Magento_Ui/js/grid/tree-massactions">
+            <action name="action_example">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">lp_mass_actions</item>
+                        <item name="label" xsi:type="string" translate="true">Unisend Actions</item>
+                    </item>
+                </argument>
+                <argument name="actions" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="type" xsi:type="string">lp_create_shipping_labels</item>
+                        <item name="label" xsi:type="string" translate="true">Create Shipping Labels</item>
+                        <item name="url" xsi:type="url" path="lp_mass/massaction/createshippinglabels" />
+                    </item>
+                    <item name="1" xsi:type="array">
+                        <item name="type" xsi:type="string">lp_cancel_shipping_labels</item>
+                        <item name="label" xsi:type="string" translate="true">Cancel Shipping Labels</item>
+                        <item name="url" xsi:type="url" path="lp_mass/massaction/cancelshippinglabels" />
+                    </item>
+                    <item name="2" xsi:type="array">
+                        <item name="type" xsi:type="string">lp_call_courier</item>
+                        <item name="label" xsi:type="string" translate="true">Call Courier</item>
+                        <item name="url" xsi:type="url" path="lp_mass/massaction/callcourier" />
+                    </item>
+                    <item name="3" xsi:type="array">
+                        <item name="type" xsi:type="string">lp_print_documents</item>
+                        <item name="label" xsi:type="string" translate="true">Print All Documents</item>
+                        <item name="url" xsi:type="url" path="lp_mass/massaction/printalldocuments" />
+                    </item>
+                    <item name="4" xsi:type="array">
+                        <item name="type" xsi:type="string">lp_print_manifests</item>
+                        <item name="label" xsi:type="string" translate="true">Print Manifests</item>
+                        <item name="url" xsi:type="url" path="lp_mass/massaction/printmanifests" />
+                    </item>
+                </argument>
+            </action>
+        </massaction>
+    </listingToolbar>
+</listing>

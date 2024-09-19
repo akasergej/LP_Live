@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="LP_LPShipping/css/filter-button.css"/>
+        <script src="LP_LPShipping/js/grid/quick-filter.js"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <uiComponent name="lp_shipping_listing"/>
+        </referenceContainer>
+    </body>
+</page>

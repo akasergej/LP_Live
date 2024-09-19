@@ -1,0 +1,357 @@
+Country,Šalis
+Country code,Šalies kodas
+Price,Kaina
+Weight To,Svoris iki
+Courier Price,Kurjerio kaina
+Terminal Price,Terminalo kaina
+Post Office Price,Siuntimo pašto skyrių kaina kaina
+Abroad Price,Siuntimo į užsienį kaina
+Export CSV,Eksportuoti CSV
+Troubleshoot,Klaidų paieška
+Could not call courier,Kurjerio kvietimas negalimas
+Courier called successfully.,Kurjeris iškviestas sėkmingai.
+CN22 form saved successfully. Now you can create your shipping label.,CN22 forma išsaugota sėkmingai. Dabar galite kurti lipduką.
+CN23 form saved successfully. Now you can create your shipping label.,CN23 forma išsaugota sėkmingai. Dabar galite kurti lipduką.
+Please select shipping size. Changes have not been saved.,Prašome pasirinkti siuntos dydį. Pakeitimai nebuvo išsaugoti.
+Shipment details has been successfully saved.,Siuntos informacija išsaugota sėkmingai.
+Could not call courier for order,Kurjerio kvietimas negalimas užsakymui
+Call Courier action complete,Kurjerio kvietimo operacija įvykdyta.
+Could not cancel label for order,Lipduko atšaukimas negalimas užsakymui
+"Could not cancel label for order, wrong order status","Lipduko atšaukimas negalimas užsakymui, netinkamas užsakymo statusas"
+You have canceled the shipping labels.,Atšaukėte siuntinio lipdukus.
+You can't create shipping labels for order,Nepavyko atšaukti lipduko užsakymui
+You have already created label for order,Lipdukas jau sukurtas užsakymui
+You created the shipping labels.,Lipdukai sukurti.
+Manifest does not exist for order,Manifestas neegzistuoja užsakymui
+Troubleshoot complete.,Klaidų paieška sėkminga.
+Error. Please check your credentials.,Klaida. Prašome patikrinti autorizacijos duomenis.
+Something wen't wrong.,Įvyko klaida.
+Something wen't wrong. Please try again later.,Įvyko klaida. Prašome pamėginti vėliau.
+Sender city is not valid.,Neteisingai Įvestas siuntėjo miestas.
+Something wen't wrong. Please try again.,Įvyko klaida. Prašome pamėginti dar kartą.
+Error authorization,Autorizacijos klaida
+"Unable to find CN22 with ID ""%1""","Unable to find CN22 with ID ""%1"""
+"Unable to find CN23 with ID ""%1""","Unable to find CN23 with ID ""%1"""
+Lithuanian Post,Lietuvos paštas
+LP EXPRESS,LP EXPRESS
+Lithuania Post,Lietuvos paštas
+Priority,Prioritetas
+Registerd,Registruotas
+Unauthorized,Neautorizuota
+Active,Aktyvus
+Unable to find terminal.,Terminalas nerastas.
+Terminal,Terminalas
+Something wen't wrong here..,Įvyko klaida..
+Weight cell in the csv file cannot be empty.,Svorio laukelis negali būti tuščias.
+Please check for weight duplicates in the csv file.,Svorio laukelyje rasta svorio dublikatų prašome patikrinti failą.
+"Unable to find Sender with ID ""%1""","Unable to find Sender with ID ""%1"""
+Unable to find Shipping Templates.,Unable to find Shipping Templates.
+Accepted,Priimta
+LP express terminal request accepted,LP express terminalo užklausa priimta
+LP express terminal request failed,LP express terminalo užklausa nepavyko
+LP express terminal request rejected,LP express terminalo užklausa atšaukta
+BP terminal request submitted,BP terminalo užklausa pateikta
+Canceled,Atšaukta
+The parcel was taken from the Lithuanian Post Office,Siunta paimta iš Lietuvos Pašto
+Parcel accepted from sender,Siunta priimta iš siuntėjo
+The parcel was delivered to the Lithuanian Post Office,Siunta buvo pristatyta į Lietuvos Paštą
+The shipment has been delivered to the receiver,Siunta pristatyta gavėjui
+Delivery failed,Pristatyti nepavyko
+Item shipped from Lithuania,Siunta išsiųsta iš Lietuvos
+The parcel has been handed over to the courier for delivery,Siunta perduota kurjeriui
+Shipment returned,Siunta grąžinta
+The parcel is being returned,Siuntinys grąžinamas
+The itemt was delivered for destruction,Siunta pristatyta sunaikinimui
+Delivered,Pristatyta
+Item accepted at distribution center,Siunta priimta skirstymo centre
+The item shall be transported to another distribution center,Prekė gabenama į kitą skirstymo centrą
+Destroyed,Sunaikinta
+It's gone,Dingo
+The shipment was detained at the distribution center of the recipient country,Siunta buvo sulaikyta šalies gavėjo paskirstymo centre
+The item has been presented to the customs authorities of the country of destination,Siunta buvo pateikta paskirties šalies muitinei
+The consignment is subject to customs controls in the country of destination,Siuntai taikoma muitinės kontrolė paskirties šalyje
+Consignment at the distribution center in the country of destination,Siunta paskirties šalies paskirstymo centre
+The shipment was sent from a distribution center in the recipient country,Siunta buvo išsiųsta iš gavėjo šalies paskirstymo centro
+The shipment is on hold in the recipient's post office,Siunta yra sulaikyta gavėjo pašto skyriuje
+The shipment has been delivered for delivery,Siunta buvo pristatyta pristatyti
+The shipment was delivered to the place of collection,Siunta buvo pristatyta į surinkimo vietą
+Consignment accepted from sender,Siunta paimta iš siuntėjo
+Consignment at distribution center,Siunta paskirstymo centre
+Consignment shipped from Lithuania,Siunta išsiųsta iš Lietuvos
+Consignment in the country of destination,Siunta paskirties šalyje
+Consignment at the customs office of destination,Siunta paskirties muitinės įstaigoje
+The shipment was sent to the recipient's post office,Siunta išsiųsta į gavėjo pašto skyrių
+Parcel at the recipient's post office,Siuntinys gavėjo pašto skyriuje
+Attempt to deliver failed,Bandymas pristatyti nepavyko
+The shipment has been delivered to the consignee,Siunta buvo pristatyta gavėjui
+The consignment has been presented to the customs authorities of the country of departure,Siunta buvo pateikta išvykimo šalies muitinei
+The consignment was detained at the office of departure,Siunta buvo sulaikyta išvykimo įstaigoje
+The consignment has been checked at the customs office of dispatch,Siunta buvo patikrinta išsiuntimo muitinės įstaigoje
+Thei tem is detained at the dispatch center of the country of dispatch,Siunta sulaikyta išsiuntimo šalies išsiuntimo centre
+Exported,Eksportuota
+The shipment has been canceled from the sender's country,Siunta atšaukta iš siuntėjo šalies
+The shipment was delivered to the parcel self-service terminal,Siunta pristatyta į savitarnos terminalą
+Served (BKIS),Pateikta (BKIS)
+Served at the post office,Pateikta pašto skyriuje
+Transferred to the State,Perduota valstybei
+Included,įtraukta
+Receipt message,Kvito pranešimas
+Delivery tag canceled,Siuntos žyma atšaukta
+Delivery tag created,Sukurta siuntos žyma
+The parcel was received at the Lithuanian Post Office,Siuntinys gautas Lietuvos pašto skyriuje
+Not included,Neįtraukta
+Unknown,Nežinoma
+Detained,Sulaikyta
+Secure on demand,Apsauga pagal poreikį
+The shipment is placed in the parcel self-service terminal for shipment,Siunta padėta į savitarnos terminalą siuntimui
+The shipment is gone,Siunta dingo
+The parcel is taken by courier from the parcel self-service terminal,Siunta paimta kurjerio iš savitarnos terminalo
+The shipment has been withdrawn by the receiver,Siunta atsiimta gavėjo
+Received,Gauta
+Forwarded,Persiųsta
+Forwarded in post office,Persiųsta pašto skyriuje
+Forwarded-Served,Persiuntimas-pateiktas
+Forwarding started,Pradėtas persiuntimas
+Refunded,Grąžinti pinigai
+Returned to post office,Grįžo į pašto skyrių
+Return started,Pradėtas grąžinimas
+Sent,Išsiųsta
+Transferred to storage,Perkelta į saugyklą
+Passed on for deliver,Perduota siuntimui
+Not delivered,Nepristatyta
+"Unable to find track with ID ""%1""","Unable to find track with ID ""%1"""
+Edit Shipment,Redaguoti siuntą
+Call Courier,Kviesti kurjerį
+Print All Documents,Spausdinti visus dokumentus
+Print Manifest,Spausdinti manifestą
+Print CN23 Declaration,Spausdinti CN23 deklaraciją
+Documents,Dokumentai
+Please select terminal.,Prašome pasirinkti terminalą.
+Courier Not Called,Kurjeris neiškviestas
+Shipment Created,Siunta suformuota
+Shipment Not Created,Siunta nesuformuota
+Shipment Canceled,Siunta atšaukta
+Parcel Information,Siuntinio informacija
+Sender Information,Siuntėjo informacija
+CN22 Declaration,CN22 deklaracija
+CN23 Declaration,CN23 deklaracija
+Ship From:,Siųsti iš:
+LP EXPRESS Courier,LP EXPRESS kurjeris
+Terminal,Terminalas
+The Item Being Sent,Prekė siunčiama
+to,iki
+To,Iki
+Ship To:,Siųsti į:
+Name,Vardas
+Phone,Telefono numeris
+Email,El. Paštas
+City,Miestas
+Street,Gatvė
+Building Number,Namo numeris
+Apartment,Buto numeris
+Post Code,Pašto kodas
+Parcel Type,Siuntinio tipas
+Parcel Type Notes,Siuntinio tipo užrašai
+Parcel Description,Siuntinio aprašymas
+Parcel Items,Siuntiniai
+Summary,Aprašymas
+Amount,Kaina
+Country of Origin,Kilmės šalis
+Currency,Valiuta
+HS Item Number,HS prekės numeris
+Weight,Svoris
+Quantity,Kiekis
+Exporter Customs Code,Eksportuotojo muitinės kodas
+License,Licencija
+Certificate,Sertifikatas
+Invoice,Sąskaita faktūra
+Notes,Užrašai
+Failure Instruction,Nesekmės instrukcija
+Importer Code,Importuotojo kodas
+Importer Customs Code,Importuotojo muitinės kodas
+Importer Email,Importuotojo el. Paštas
+Importer Fax,Importuotojo faksas
+Importer Phone,Importuotojo telefonas
+Importer Tax Code,Importuotojo mokesčių kodas
+Importer Vat Code,Importuotojo PVM kodas
+Description,Aprašymas
+Terminal:,Terminalas:
+Please select terminal..,Prašome pasrinkti terminalą..
+Shipment Details,Siuntos nustatymai
+Close,Uždaryti
+Save,Išsaugoti
+Wrong phone format, Netinkamas telefono numerio formatas
+Please select terminal locality..,Prašome pasirinkti terminalo vietovę..
+Please select terminal..,Prašome pasirinkti terminalą..
+This is a required field.,Šis laukas privalomas.
+Status,Statusas
+Enabled,Įjungtas
+Available Services,Galimos paslaugos
+Sort Order,Rikiuoti
+Authorization Settings,Autorizacijos nustatymai
+Test Mode,Testavimo rėžimas
+Username,Vartotojo vardas
+Password,Slaptažodis
+Apartment Number,Buto numeris
+Lithuanian Post Delivery Settings,Lietuvos pašto pristatymo nustatymai
+Delivery Methods Lithuanian Post,Lietuvos pašto pristatymo būdai
+Post Office Delivery Price,Pristatymo į pašto skyrių kaina
+Post Office Shipping Size,Pristatymo į pašto skyrių siuntos dydis
+Post Office Delivery Time,Pristatymo į pašto skyrių pristatymo laikas
+Abroad Delivery Price,Pristatymo į užsienį kaina
+Abroad Delivery Time,Pristatymo į užsienį pristatymo laikas
+Export Price vs Weight,Eksportuoti kainą pagal svorį
+Import Price vs Weight,Importuoti kainą pagal svorį
+Export Price vs Country,Eksportuoti kainą pagal šalį
+Import Price vs Country,Importuoti kainą pagal šalį
+"Import pricing table by weight and/or country", "Importuoti kainų lentelę pagal svorį ir/ar šalį"
+"Export pricing table by weight and/or country", "Eksportuoti kainų lentelę pagal svorį ir/ar šalį"
+Ship to Specific Countries,Siųsti į pasirinktas šalis
+Ship to Applicable Countries,Galimos šalys
+LP EXPRESS Delivery Settings,LP EXPRESS pristatymo nustatymai
+Delivery Methods LP EXPRESS,LP EXPRESS pristatymo būdai
+Courier Delivery Price,Kurjerio pristatymo kaina
+Courier Shipping Method,Kurjerio siuntimo būdas
+Courier Shipping Size,Kurjerio siuntos dydis
+Courier Delivery Time,Kurjerio pristatymo laikas
+Call Courier Automatically,Kviesti kurjerį automatiškai
+Terminal Delivery Price,Terminalo pristatymo kaina
+Terminal Shipping Method,Terminalo siuntimo būdas
+Terminal Shipping Size,Terminalo dėžutės dydis
+Terminal Delivery Time,Terminalo pristatymo laikas
+Post Office Shipping Method,Pašto siuntimo būdas
+Overseas Shipping Method,Pristatymo į užsienį siuntimo būdas
+Other Settings,Kiti nustatymai
+Consignment Formation,Siuntos formavimas
+Label Format,Lipduko formatas
+Help,Pagalba
+Unisend Actions,Unisend veiksmai
+Create Shipping Labels,Generuoti lipdukus
+Cancel Shipping Labels,Atšaukti lipdukus
+Print Manifests,Spausdinti manifestus
+All,Visos
+Country,Šalis
+Maximum length: 100 characters,Maksimalus ilgis: 100 simbolių
+Format: 370XXXXXXXX,Formatas: 370XXXXXXXX
+Maximum length: 128 characters,Maksimalus ilgis: 128 simboliai
+Maximum length: 20 characters,Maksimalus ilgis: 20 simbolių
+Maximum length: 35 characters,Maksimalus ilgis: 35 simbolių
+Maximum length: 50 characters,Maksimalus ilgis: 50 simbolių
+Press "CTRL" button on your keyboard to select multiple or deselect,Spauskite "CTRL" klavišą jei norite pasirinkti kelis ar atžymėti pasirinktus
+Leave empty if you want to use Price vs Weight table.,Palikite tuščią jei norite naudoti kainos pagal svorį lentelę
+Example: 4 d.d.,Pavyzdžiui 4 d.d.
+Leave empty if you want to use Price vs Country table.,Palikite tuščią jei norite naudoti kainos pagal šalį lentelę
+Username from manosiuntos.post.lt,manosiuntos.post.lt vartotojo vardas
+Password from manosiuntos.post.lt,manosiuntos.post.lt slaptažodis
+Delivery time:,Pristatymo laikas:
+Courier Called,Kurjeris iškviestas
+Courier Not Called,Kurjeris neiškviestas
+Shipment Created,Siunta suformuota
+Shipment Not Created,Siunta nesuformuota
+Yes,Taip,
+No,Ne
+Post Office Shipping Type,Pristatymo į paštą siuntos tipas
+Overseas Shipping Type,Pristatymo į užsienį siuntos tipas
+Corespondence,Siunta
+Package,Siuntinys
+Corespondence Tracked,Siunta su sekimu
+Use Price vs Country vs Weight Table,Naudoti kainą pagal šalį ir svorį
+Export Price vs Country vs Weight,Eksportuoti kainą pagal šalį ir svorį
+Import Price vs Country vs Weight,Importuoti kainą pagal šalį ir svorį
+"Unauthorized, contact api-manosiuntos@post.lt for api credentials.", "Neautorizuota, norėdami gauti prisijungimus, kreipkitės į api-manosiuntos@post.lt"
+Lithuania, Lietuva
+Latvia, Latvija
+Estonia, Estija
+or, arba
+Sender country, Siuntėjo šalis
+Address line 1, Adreso eilutė 1
+Address line 2, Adreso eilutė 2
+"Maximum length: 50 characters, enter only street address data e.g. Jasinskio g.", "Maksimalus ilgis: 50 simbolių, veskite tik gatvės adreso informaciją, pvz.: Jasinskio g."
+Wrong Post Code, Netinkamas pašto kodas
+Unisend, Unisend
+Courier arrival time, Kurjerio atvykimo laikas
+Label orientation, Lipduko orientacija
+Send return label, Siųsti grąžinimo lapą
+"Delivery To Home, Office Or Post Office","Siuntų pristatymas į namus, buveinę ar paštą"
+Delivery Abroad,Siuntų pristatymas į užsienį
+Delivery To Home Or Office By Courier,"Siuntų pristatymas į namus ar buveinę"
+Delivery To Terminal,Siuntų pristatymas į paštomatą
+Delivery From Terminal To Terminal,Siuntų pristatymas iš paštomato į paštomatą
+Delivery To Post Office,Siuntų pristatymas į paštą
+Terminal to terminal Price, Pristatymo iš paštomato į paštomatą kaina
+Terminal to terminal Time, Pristatymo iš paštomato į paštomatą laikas
+Order sum after which shipping will be free, Užsakymo riba po kurios pristatymas taps nemokamas
+Free from, Nemokamai nuo
+"If you have not yet uploaded any prices, you can still use this button to download required csv format file.", "Net jei dar nesate įkėlę kainų, šį mygtuką galite naudoti pavyzdinio csv failo atsisiuntimui."
+
+"Shipment from the post office to the receiver's address/post office", "Pristatymas iš pašto į gavėjo adresą/paštą"
+"Shipment from the post office to the receiver's address/post office configuration", "Pristatymo iš pašto į gavėjo adresą/paštą konfigūracija"
+"Shipment from the post office to the receiver's address without a signature", "Pristatymas iš pašto į gavėjo adresą be parašo"
+"Shipment from the post office to the receiver's address without a signature configuration", "Pristatymo iš pašto į gavėjo adresą be parašo konfigūracija"
+"Shipment from the post office to the receiver's address/post office with signature", "Pristatymas iš pašto į gavėjo adresą/paštą su parašu"
+"Shipment from the post office to the receiver's address/post office with signature configuration", "Pristatymo iš pašto į gavėjo adresą/paštą su parašu konfigūracija"
+"To address/post office", "Gavėjo adresu/į paštą"
+"To address without a signature", "Gavėjo adresu be parašo"
+"To address/post office with signature", "Gavėjo adresu/į paštą su parašu"
+
+"Shipment from home/office delivered by UNISEND courier to the receiver's address", "Pristatymas iš namų/ofiso į gavėjo adresą"
+"Shipment from home/office delivered by UNISEND courier to the receiver's address configuration", "Pristatymo iš namų/ofiso į gavėjo adresą konfigūracija"
+"Shipment from UNISEND self-service terminal/locker, delivered by UNISEND courier to the receiver's address", "Pristatymas iš paštomato į gavėjo adresą"
+"Shipment from UNISEND self-service terminal/locker, delivered by UNISEND courier to the receiver's address configuration", "Pristatymo iš paštomato į gavėjo adresą konfigūracija"
+"Shipment from and to UNISEND self-service terminal/ locker.", "Pristatymas iš paštomato į paštomatą"
+"Shipment from and to UNISEND self-service terminal/ locker configuration", "Pristatymo iš paštomato į paštomatą konfigūracija"
+"Shipment from home/office delivered to UNISEND self-service terminal/ locker.", "Pristatymas iš namų/ofiso į paštomatą"
+"Shipment from home/office delivered to UNISEND self-service terminal/ locker configuration", "Pristatymo iš namų/ofiso į paštomatą konfigūracija"
+"Shipment from and to UNISEND self-service terminal/ locker within 72 hours", "Pristatymas iš paštomato į paštomatą per 72 valandas"
+"Shipment from and to UNISEND self-service terminal/ locker within 72 hours configuration", "Pristatymo iš paštomato į paštomatą per 72 valandas konfigūracija"
+"Shipment from home/office delivered to the receiver's post office", "Pristatymas iš namų/ofiso į gavėjo pašto skyrių"
+"Shipment from home/office delivered to the receiver's post office configuration", "Pristatymo iš namų/ofiso į gavėjo pašto skyrių konfigūracija"
+"Courier to the receiver's address", "Kurjeris gavėjo adresu"
+"To UNISEND self-service terminal/ locker", "Į UNISEND paštomatą"
+"To receiver's post office", "Į gavėjo pašto skyrių"
+Delivery Price, Pristatymo kaina
+Free from, Nemokamai nuo
+Unisend Delivery Settings, "Unisend pristatymo nustatymai"
+Delivery Methods Unisend, Unisend pristatymo būdai
+"Invalid phone number. Supported format: +371XXXXXXXX", "Netinkamas telefono numeris. Palaikomas formatas: +371XXXXXXXX"
+"Invalid phone number. Supported format: +372XXXXXXXX or +372XXXXXXX", "Netinkamas telefono numeris. Palaikomas formatas: +372XXXXXXXX arba +372XXXXXXX"
+"Invalid phone number. Supported format: +370XXXXXXXX", "Netinkamas telefono numeris. Palaikomas formatas: +370XXXXXXXX"
+"Address not found, please check entered address fields.", "Nerastas adresas, patikrinkite įvestus adreso laukelius."
+"Warehouse address is same as sender", "Sandėlio adresas toks pat kaip siuntėjo"
+"Warehouse Information", "Sandėlio informacija"
+Delivery time, Pristatymo laikas
+"Package quantity:", "Siuntų kiekis:"
+"Package weight in grams:", "Siuntos svoris gramais:"
+Order ID, Užsakymo ID
+Client, Klientas
+Details, Užsakymo informacija
+Shipping plan, Užsakymo planas
+Tracking, Siuntos barkodas
+Manifest Date, Manifesto data
+Purchase Date, Užsakymo data
+Action, Veiksmai
+Date: , "Data: "
+Size: , "Dydis: "
+Weight: , "Svoris: "
+Print Label, Spausdinti lipduką
+Actions, Veiksmai
+"Parcel weight is required for order, please specify in shipment details", "Pakuotės svoris nenurodytas, nurodykite siuntos redagavimo lange"
+"The shipment has not been formed", "Siunta dar nesukurta"
+"Courier Called", "Kurjeris iškviestas"
+"Shipment Created", "Siunta sukurta"
+"Pending", "Laukiama"
+"Canceled", "Atšaukta"
+"Shipment Canceled", "Siunta atšaukta"
+"Courier call not allowed for order", "Kurjerio kvietimas užsakymui negalimas."
+"All orders", "Visi užsakymai"
+"New orders", "Nauji"
+"Courier not called", "Laukia kurjerio kvietimo"
+"Generated orders", "Sugeneruoti"
+"Completed orders", "Įvykdyti"
+"Ship", "Siųsti"
+"Something went wrong, try again", "Įvyko netikėta klaida, bandykite dar kartą."
+"Title for LT","Pavadinimas LT"
+"Title for LV","Pavadinimas LV"
+"Title for EE","Pavadinimas EE"
+"Title for EN","Pavadinimas EN"
+"Default shipment size","Pritaikomas dydis pagal nutylėjimą"

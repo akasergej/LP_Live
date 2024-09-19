@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="admin">
+        <route id="adminhtml">
+            <module name="LP_LPShipping" before="Magento_Backend" />
+        </route>
+        <route id="lp_mass" frontName="lp_mass">
+            <module name="LP_LPShipping" />
+        </route>
+        <route id="lp_action" frontName="lp_action">
+            <module name="LP_LPShipping" />
+        </route>
+        <route id="lp_shipping" frontName="lp_shipping">
+            <module name="LP_LPShipping" before="Magento_Backend"/>
+        </route>
+    </router>
+</config>

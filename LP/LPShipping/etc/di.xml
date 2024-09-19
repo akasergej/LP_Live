@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Config\Model\Config">
+        <plugin name="admin_system_config_save_plugin"
+                type="LP\LPShipping\Plugin\SaveConfigPlugin" sortOrder="10"/>
+    </type>
+    <type name="Magento\Checkout\Block\Checkout\LayoutProcessor">
+        <plugin name="add_lpexpress_terminal"
+                type="LP\LPShipping\Plugin\Checkout\LayoutProcessorPlugin" sortOrder="10"/>
+    </type>
+    <type name="Magento\Checkout\Model\ShippingInformationManagement">
+        <plugin name="save_in_quote"
+                type="LP\LPShipping\Plugin\Checkout\ShippingInformationManagementPlugin" sortOrder="10" />
+    </type>
+    <type name="Magento\Quote\Model\PaymentMethodManagement">
+        <plugin name="hide_cod_for_specific_shipping_method"
+                type="LP\LPShipping\Plugin\Checkout\PaymentMethodManagementPlugin" sortOrder="10" />
+    </type>
+    <type name="Magento\Shipping\Controller\Adminhtml\Order\Shipment\RemoveTrack">
+        <plugin name="remove_track_plugin"
+                type="LP\LPShipping\Plugin\Adminhtml\Order\Shipment\RemoveTrackPlugin" sortOrder="10" />
+    </type>
+    <type name="Magento\Shipping\Controller\Adminhtml\Order\Shipment\Save">
+        <plugin name="save_shipment_plugin"
+                type="LP\LPShipping\Plugin\Adminhtml\Order\Shipment\SavePlugin" sortOrder="10" />
+    </type>
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="lp_shipping_listing_data_source" xsi:type="string">LPShippingCollection</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="LPShippingCollection" type="LP\LPShipping\Ui\DataProvider\Shipping\Listing\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">sales_order_grid</argument>
+            <argument name="resourceModel" xsi:type="string">LP\LPShipping\Model\ResourceModel\Order</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Force disable date check plugin that breaks the filter -->
+    <!-- This should be fixed in Magento 2.4.7 -->
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <plugin name="orderGridCollectionFilterPlugin"
+                type="Magento\Sales\Plugin\Model\ResourceModel\Order\OrderGridCollectionFilter"
+                disabled="true"/>
+    </type>
+
+    <preference for="LP\LPShipping\Api\Data\CN22Interface" type="LP\LPShipping\Model\CN22"/>
+    <preference for="LP\LPShipping\Api\CN22RepositoryInterface" type="LP\LPShipping\Model\CN22Repository"/>
+    <preference for="LP\LPShipping\Api\Data\CN23Interface" type="LP\LPShipping\Model\CN23"/>
+    <preference for="LP\LPShipping\Api\CN23RepositoryInterface" type="LP\LPShipping\Model\CN23Repository"/>
+    <preference for="LP\LPShipping\Api\Data\TrackingInterface" type="LP\LPShipping\Model\Tracking"/>
+    <preference for="LP\LPShipping\Api\TrackingRepositoryInterface" type="LP\LPShipping\Model\TrackingRepository"/>
+    <preference for="LP\LPShipping\Api\Data\LPExpressTerminalsInterface" type="LP\LPShipping\Model\LPExpressTerminals" />
+    <preference for="LP\LPShipping\Api\LPExpressTerminalRepositoryInterface" type="LP\LPShipping\Model\LPExpressTerminalRepository" />
+    <preference for="LP\LPShipping\Api\Data\SenderInterface" type="LP\LPShipping\Model\Sender"/>
+    <preference for="LP\LPShipping\Api\SenderRepositoryInterface" type="LP\LPShipping\Model\SenderRepository" />
+</config>

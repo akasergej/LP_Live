@@ -1,0 +1,15 @@
+<?php if ($block->showSelect()): ?>
+    <div style="padding-top:10px; display: flex">
+        <b><?php echo __('Terminal:'); ?> </b>&nbsp;&nbsp;
+        <select name="order[lpexpress_terminal]" id="lpexpress_terminal_select">
+            <option value=""><?php echo __('Please select terminal..'); ?></option>
+            <?php foreach (array_reverse($block->getTerminals()) as $city => $terminalList): ?>
+                <optgroup label="<?php echo $city; ?>">
+                    <?php foreach ($terminalList as $terminalId => $terminal): ?>
+                        <option value="<?php echo $terminalId; ?>"><?php echo $terminal; ?></option>
+                    <?php endforeach; ?>
+                </optgroup>
+            <?php endforeach; ?>
+        </select>
+    </div>
+<?php endif; ?>

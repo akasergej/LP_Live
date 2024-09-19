@@ -1,0 +1,13 @@
+<div data-bind="visible: selectedMethodNeedsTerminalsList()">
+    <label data-bind="i18n: 'Terminal'"></label>
+    <select name="lpexpress-terminal" style="margin-top: 10px;" class="select-terminal-required"
+            id="lpexpress-terminal-list"
+            data-bind="
+                options: availableTerminals(getSelectedCountry(), selectedMethodNeedsTerminalsList()),
+                optionsText: 'name',
+                optionsValue: 'id',
+                optionsCaption: selectTerminalCaption
+            "
+            data-mage-init='{"validation":{}}' data-validate='{"required":true}'>
+    </select>
+</div>

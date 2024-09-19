@@ -1,0 +1,915 @@
+<?php
+
+use LP\LPShipping\Helper\ShippingHelper;
+use Magento\Catalog\Model\Product;
+use Magento\OfflinePayments\Model\Cashondelivery;
+
+/** @var \Magento\Sales\Api\Data\OrderInterface $order */
+$order = $block->getData('order');
+
+$shippingMethod = $order->getShippingMethod();
+$shippingAddress = $order->getShippingAddress();
+$canChangePackageQuantity = $shippingAddress->getCountryId() === 'LT' && (str_contains($shippingMethod, 'H2H') || str_contains($shippingMethod, 'H2P'));
+$isTerminalShippingMethod = ShippingHelper::isTerminalShippingMethod($shippingMethod);
+$isCodAvailable = $block->getData('isCodAvailable');
+
+$sender = $block->getData('sender');
+$packageQuantity = $block->getData('packageQuantity');
+$availableSizes = $block->getData('availableSizes');
+$packageWeight = $block->getData('weight');
+$packageSize = $block->getData('size');
+
+/** @var \LP\LPShipping\Api\Data\CN22Interface|bool $CN22 */
+$CN22 = $block->getData('CN22');
+
+/** @var \LP\LPShipping\Api\Data\CN23Interface|bool $CN23 */
+$CN23 = $block->getData('CN23');
+
+// Format CN22Parts Object
+$CN22Parts = [];
+
+// Default CN Parts
+$CNPartsDefault = [];
+
+foreach ($block->getData('order')->getAllVisibleItems() as $item) {
+    $CNPartsDefault [] = ( object ) [
+        'summary' => $item->getName(),
+        'amount' => $item->getPrice(),
+        'countryCode' => 'LT', // Default country of origin
+        'currencyCode' => $block->getData('order')->getOrderCurrencyCode(),
+        'hsCode' => '',
+        'weight' => $item->getWeight() * 1000, // Weight in grams
+        'quantity' => $item->getQtyOrdered()
+    ];
+}
+
+if (!$CN22 || !$CN22->getCnParts()) {
+    $CN22Parts = $CNPartsDefault;
+} else {
+    $CN22Parts = json_decode($CN22->getCnParts());
+}
+
+$CN23Parts = [];
+
+if (!$CN23 || !$CN23->getCnParts()) {
+    $CN23Parts = $CNPartsDefault;
+} else {
+    $CN23Parts = json_decode($CN23->getCnParts());
+}
+?>
+<div id="eshoper-lpshipping-shipment-modal" style="display: none">
+    <form action="<?php echo $block->getData('actionUrl'); ?>" data-mage-init='{"validation": {}}'>
+        <input type="hidden" name="order_id" value="<?php echo $order->getEntityId(); ?>" />
+        <div class="lpshipping-shipment-nav" style="display: flex; border-bottom: 1px solid #e4e4e4;">
+            <div class="step active" data-tab="1" style="padding: 20px; padding-bottom: 0px;
+                    border-right: 1px solid #e4e4e4;">
+                <h3><?php echo __('Parcel Information'); ?></h3>
+            </div>
+            <div class="step" data-tab="2" style="padding: 20px; padding-bottom: 0px;
+                border-right: 1px solid #e4e4e4;">
+                <h3><?php echo __('Sender Information'); ?></h3>
+            </div>
+            <?php if ($CN22): ?>
+                <div class="step" data-tab="3" style="padding: 20px; padding-bottom: 0px;
+                    border-right: 1px solid #e4e4e4;">
+                    <h3><?php echo __('CN22 Declaration'); ?></h3>
+                </div>
+            <?php endif; ?>
+            <?php if ($CN23): ?>
+                <div class="step" data-tab="4" style="padding: 20px; padding-bottom: 0px;">
+                    <h3><?php echo __('CN23 Declaration'); ?></h3>
+                </div>
+            <?php endif; ?>
+        </div>
+        <div class="tab tab-active" data-tab="1">
+            <div style="display: flex; margin-top: 20px">
+                <div>
+                    <span><h2><?php echo __('The Item Being Sent'); ?></h2></span>
+                    <ul class="lpshipping-list-sizes">
+                        <?php if (in_array('XS', $availableSizes)): ?>
+                            <li class="lpshipping-list-sizes-item">
+                                <label class="lpshipping-list-sizes-item-size <?php echo $packageSize == 'XS' ? 'active' : ''; ?>">
+                                    <img src="<?php echo $this->getViewFileUrl('LP_LPShipping::images/box-type-1.svg'); ?>" alt="">
+                                    <input type="radio" name="shipping_size" value="XS" <?php echo $packageSize == 'XS' ? 'checked' : ''; ?> />
+                                    <span>XS - <?php echo __('to'); ?> 30 kg</span>
+                                    <span class="color-gray">185/610/80 mm</span>
+                                </label>
+                            </li>
+                        <?php endif; ?>
+                        <?php if (in_array('S', $availableSizes)): ?>
+                            <li class="lpshipping-list-sizes-item">
+                                <label class="lpshipping-list-sizes-item-size <?php echo $packageSize == 'S' ? 'active' : ''; ?>">
+                                    <img src="<?php echo $this->getViewFileUrl('LP_LPShipping::images/box-type-2.svg'); ?>" alt="">
+                                    <input type="radio" name="shipping_size" value="S" <?php echo $packageSize == 'S' ? 'checked' : ''; ?> />
+                                    <span>S - <?php echo __('to'); ?> 30 kg</span>
+                                    <span class="color-gray">350/610/80 mm</span>
+                                </label>
+                            </li>
+                        <?php endif; ?>
+                        <?php if (in_array('M', $availableSizes)): ?>
+                            <li class="lpshipping-list-sizes-item">
+                                <label class="lpshipping-list-sizes-item-size <?php echo $packageSize == 'M' ? 'active' : ''; ?>">
+                                    <img src="<?php echo $this->getViewFileUrl('LP_LPShipping::images/box-type-3.svg'); ?>" alt="">
+                                    <input type="radio" name="shipping_size" value="M" <?php echo $packageSize == 'M' ? 'checked' : ''; ?> />
+                                    <span>M - <?php echo __('to'); ?> 30 kg</span>
+                                    <span class="color-gray">350/610/175 mm</span>
+                                </label>
+                            </li>
+                        <?php endif; ?>
+                        <?php if (in_array('L', $availableSizes)): ?>
+                            <li class="lpshipping-list-sizes-item">
+                                <label class="lpshipping-list-sizes-item-size <?php echo $packageSize == 'L' ? 'active' : ''; ?>">
+                                    <img src="<?php echo $this->getViewFileUrl('LP_LPShipping::images/box-type-4.svg'); ?>" alt="">
+                                    <input type="radio" name="shipping_size" value="L" <?php echo $packageSize == 'L' ? 'checked' : ''; ?> />
+                                    <span>L - <?php echo __('to'); ?> 30 kg</span>
+                                    <span class="color-gray">350/610/365 mm</span>
+                                </label>
+                            </li>
+                        <?php endif; ?>
+                        <?php if (in_array('XL', $availableSizes)): ?>
+                            <li class="lpshipping-list-sizes-item">
+                                <label class="lpshipping-list-sizes-item-size <?php echo $packageSize == 'XL' ? 'active' : ''; ?>">
+                                    <img src="<?php echo $this->getViewFileUrl('LP_LPShipping::images/box-type-5.svg'); ?>" alt="">
+                                    <input type="radio" name="shipping_size" value="XL" <?php echo $packageSize == 'XL' ? 'checked' : ''; ?> />
+                                    <span>XL - <?php echo __('to'); ?> 30 kg</span>
+                                    <span class="color-gray">350/610/745 mm</span>
+                                </label>
+                            </li>
+                        <?php endif; ?>
+                    </ul>
+                </div>
+            </div>
+            <div class="additional-options">
+                <div class="admin__field">
+                    <?php if ($order->getPayment()->getMethod() === Cashondelivery::PAYMENT_METHOD_CASHONDELIVERY_CODE && $isCodAvailable): ?>
+                        <label style="margin-left: 10px" class="admin__field-label">COD (&euro;):
+                            <input type="number" step="0.01"
+                                   value="<?php echo number_format($order->getLpCod() ?? $order->getGrandTotal(), 2); ?>"
+                                   min="0.00" class="admin__control-text" name="cod"
+                                   data-validate='{"required":true}' />
+                        </label>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <?php if ($isTerminalShippingMethod): ?>
+                <div style="display: flex;">
+                    <div style="width: 75%">
+                        <span><h2><?php echo __('Ship To:'); ?></h2></span>
+                        <div class="admin__field-control">
+                            <b>Terminal:</b> <select name="terminal_id" class="admin__control-select">
+                                <?php foreach ($block->getData('terminals') as $country => $terminalsByCountry): ?>
+                                    <?php foreach ($terminalsByCountry as $city => $terminals): ?>
+                                        <optgroup label="<?php echo $city; ?>">
+                                            <?php foreach ($terminals as $terminalId => $terminal): ?>
+                                                <option
+                                                    value="<?php echo $terminalId; ?>" <?php echo $order->getLpexpressTerminal() == $terminalId ? 'selected' : ''; ?>>
+                                                    <?php echo $terminal; ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </optgroup>
+                                    <?php endforeach; ?>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+            <div class="admin__field">
+                <div class="admin__field-control">
+                    <b><label for="package_weight" class="admin__field-label">
+                            <?php echo __('Package weight in grams:'); ?>
+                        </label></b>
+                    <input type="number" style="width: 30%;" name="package_weight"
+                           id="package_weight" class="admin__control-text"
+                           value="<?php echo htmlentities($packageWeight); ?>"
+                           data-validate='{"required":true}'/>
+                </div>
+            </div>
+            <?php if ($canChangePackageQuantity): ?>
+                <div class="admin__field">
+                    <div class="admin__field-control">
+                        <b><label for="package_quantity" class="admin__field-label">
+                            <?php echo __('Package quantity:'); ?>
+                        </label></b>
+                        <input type="number" style="width: 30%;" name="package_quantity"
+                               id="package_quantity" class="admin__control-text"
+                               value="<?php echo htmlentities($packageQuantity); ?>"
+                               data-validate='{"required":true}'/>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </div>
+        <!-- Sender info -->
+        <div class="tab" data-tab="2" style="margin-top: 20px">
+            <h2><?php echo __('Sender Information'); ?></h2>
+            <div class="admin__field">
+                <label for="sender_name" class="admin__field-label">
+                    <?php echo __('Name'); ?> <span style="color:red">*</span>
+                </label>
+                <div class="admin__field-control">
+                    <input name="sender[sender_name]"
+                           id="sender_name" class="admin__control-text" value="<?php echo htmlentities($sender [ 'name' ] ?? ''); ?>"
+                           data-validate='{"required":true}' />
+                </div>
+            </div>
+            <div class="admin__field">
+                <label for="sender_phone" class="admin__field-label">
+                    <?php echo __('Phone'); ?> <span style="color:red">*</span>
+                </label>
+                <div class="admin__field-control">
+                    <input name="sender[sender_phone]"
+                           id="sender_phone" class="admin__control-text" value="<?php echo $sender [ 'phone' ]; ?>"
+                           data-validate='{"required":true}' />
+                </div>
+            </div>
+            <div class="admin__field">
+                <label for="sender_email" class="admin__field-label">
+                    <?php echo __('Email'); ?> <span style="color:red">*</span>
+                </label>
+                <div class="admin__field-control">
+                    <input type="email" name="sender[sender_email]"
+                           id="sender_email" class="admin__control-text" value="<?php echo $sender [ 'email' ]; ?>"
+                           data-validate='{"required":true}' />
+                </div>
+            </div>
+            <div class="admin__field">
+                <label for="sender_country" class="admin__field-label">
+                    <?php echo __('Country'); ?> <span style="color:red">*</span>
+                </label>
+                <div class="admin__field-control">
+                    <select name="sender[sender_country]" id="sender_country" class="admin__control-select">
+                        <?php foreach ($block->getData('countries')->toOptionArray() as $country): ?>
+                                <option value="<?php echo $country [ 'value' ]; ?>" <?php echo $country [ 'value' ] === $sender [ 'country' ] ? 'selected' : ''; ?>>
+                                    <?php echo $country [ 'label' ]; ?>
+                                </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+            <div class="admin__field">
+                <label for="sender_city" class="admin__field-label">
+                    <?php echo __('City'); ?> <span style="color:red">*</span>
+                </label>
+                <div class="admin__field-control">
+                    <input type="text" name="sender[sender_city]" value="<?php echo $sender [ 'city' ]; ?>"
+                           id="sender_city" class="admin__control-text"
+                           data-validate='{"required":true}' />
+                </div>
+            </div>
+            <div class="admin__field">
+                <label for="sender_street" class="admin__field-label">
+                    <?php echo __('Street'); ?> <span style="color:red">*</span>
+                </label>
+                <div class="admin__field-control">
+                    <input type="text" name="sender[sender_street]" value="<?php echo $sender [ 'street' ]; ?>"
+                           id="sender_street" class="admin__control-text"
+                           data-validate='{"required":true}' />
+                </div>
+            </div>
+            <div class="admin__field">
+                <label for="sender_building" class="admin__field-label">
+                    <?php echo __('Building Number'); ?> <span style="color:red">*</span>
+                </label>
+                <div class="admin__field-control">
+                    <input type="text" name="sender[sender_building]" value="<?php echo $sender [ 'building' ]; ?>"
+                           id="sender_building" class="admin__control-text"
+                           data-validate='{"required":true}' />
+                </div>
+            </div>
+            <div class="admin__field">
+                <label for="sender_apartment" class="admin__field-label">
+                    <?php echo __('Apartment'); ?>
+                </label>
+                <div class="admin__field-control">
+                    <input type="text" name="sender[sender_apartment]" value="<?php echo $sender [ 'apartment' ]; ?>"
+                           id="sender_apartment" class="admin__control-text" />
+                </div>
+            </div>
+            <div class="admin__field">
+                <label for="sender_postcode" class="admin__field-label">
+                    <?php echo __('Post Code'); ?> <span style="color:red">*</span>
+                </label>
+                <div class="admin__field-control">
+                    <input type="text" name="sender[sender_postcode]" value="<?php echo $sender [ 'postcode' ]; ?>"
+                           id="sender_postcode" class="admin__control-text"
+                           data-validate='{"required":true}' />
+                </div>
+            </div>
+            <div class="admin__field">
+                <label for="addressLine1" class="admin__field-label">
+                    <?php echo __('Address line 1'); ?>
+                </label>
+                <div class="admin__field-control">
+                    <input type="text" name="sender[addressLine1]" value="<?php echo $sender [ 'addressLine1' ]; ?>"
+                           id="addressLine1" class="admin__control-text"/>
+                </div>
+            </div>
+            <div class="admin__field">
+                <label for="addressLine2" class="admin__field-label">
+                    <?php echo __('Address line 2'); ?>
+                </label>
+                <div class="admin__field-control">
+                    <input type="text" name="sender[addressLine2]" value="<?php echo $sender [ 'addressLine2' ]; ?>"
+                           id="addressLine2" class="admin__control-text"/>
+                </div>
+            </div>
+        </div>
+        <?php if ($CN22): ?>
+            <div class="tab" data-tab="3" style="margin-top: 20px;">
+            <h2><?php echo __('CN22 Declaration'); ?></h2>
+            <div class="admin__field">
+                <label for="parcel_type" class="admin__field-label">
+                    <?php echo __('Parcel Type'); ?> <span style="color:red">*</span>
+                </label>
+                <div class="admin__field-control">
+                    <select name="cn22[parcel_type]" id="parcel_type" class="admin__control-select">
+                        <option value="Sell">Sell</option>
+                        <option value="Gift" <?php echo $CN22->getParcelType() == 'Gift' ? 'selected' : ''; ?>>Gift</option>
+                        <option value="Document" <?php echo $CN22->getParcelType() == 'Document' ? 'selected' : ''; ?>>Document</option>
+                        <option value="Sample" <?php echo $CN22->getParcelType() == 'Sample' ? 'selected' : ''; ?>>Sample</option>
+                        <option value="Return" <?php echo $CN22->getParcelType() == 'Return' ? 'selected' : ''; ?>>Return</option>
+                        <option value="Other" <?php echo $CN22->getParcelType() == 'Other' ? 'selected' : ''; ?>>Other</option>
+                    </select>
+                </div>
+            </div>
+            <div class="admin__field">
+                <label for="parcel_description" class="admin__field-label">
+                    <?php echo __('Parcel Description'); ?> <span style="color:red">*</span>
+                </label>
+                <div class="admin__field-control">
+                <textarea name="cn22[parcel_description]" id="parcel_description"
+                          class="admin__control-textarea"
+                          data-validate='{"required":true}'><?php echo $CN22->getParcelDescription() ?: 'Sell'; ?></textarea>
+                </div>
+            </div>
+            <section class="admin__page-section">
+                <div class="admin__page-section-title">
+                    <span class="title"><?php echo __('Parcel Items') ?></span>
+                </div>
+                <div class="admin__table-wrapper">
+                    <table class="data-table admin__table-primary edit-order-table">
+                        <thead>
+                        <tr class="headings">
+                            <th class="col-summary">
+                            <span>
+                                <?php echo __('Summary'); ?> <span style="color:red">*</span>
+                            </span>
+                            </th>
+                            <th class="col-amount">
+                            <span>
+                                <?php echo __('Amount'); ?> <span style="color:red">*</span>
+                            </span>
+                            </th>
+                            <th class="col-country">
+                            <span>
+                                <?php echo __('Country of Origin'); ?> <span style="color:red">*</span>
+                            </span>
+                            </th>
+                            <th class="col-currency">
+                            <span>
+                                <?php echo __('Currency'); ?> <span style="color:red">*</span>
+                            </span>
+                            </th>
+                            <th class="col-hs-code">
+                                <span><?php echo __('HS Item Number'); ?></span>
+                            </th>
+                            <th class="col-weight">
+                            <span>
+                                <?php echo __('Weight'); ?> (g) <span style="color:red">*</span>
+                            </span>
+                            </th>
+                            <th class="col-quantity">
+                            <span>
+                                <?php echo __('Quantity'); ?> <span style="color:red">*</span>
+                            </span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody class="even">
+                        <?php /* @var Product $item */ ?>
+                        <?php $counter = -1;
+            foreach ($CN22Parts as $item): $counter++; ?>
+                            <tr>
+                                <td class="col-summary">
+                                    <div class="admin__field-control">
+                                        <input name="cn22[items][<?php echo $counter; ?>][summary]]" type="text" id="summary"
+                                               class="admin__control-text" value="<?php echo $item->summary; ?>"
+                                               data-validate='{"required":true}' />
+                                    </div>
+                                </td>
+                                <td class="col-amount">
+                                    <div class="admin__field-control">
+                                        <input name="cn22[items][<?php echo $counter; ?>][amount]" type="number"
+                                               value="<?php echo number_format($item->amount, 2); ?>"
+                                               step="0.01" id="amount" class="admin__control-text"
+                                               data-validate='{"required":true}' />
+                                    </div>
+                                </td>
+                                <td class="col-country" style="max-width: 155px">
+                                    <select name="cn22[items][<?php echo $counter; ?>][countryCode]" id="countryCode" class="admin__control-select">
+                                        <?php foreach ($block->getData('countries')->availableCountries() as $country): ?>
+                                                <option value="<?php echo $country [ 'value' ] ?>" <?php echo $country [ 'value' ] === 'LT' ? 'selected' : ''; ?>>
+                                                    <?php echo $country [ 'label' ]; ?>
+                                                </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </td>
+                                <td class="col-currency">
+                                    <select name="cn22[items][<?php echo $counter; ?>][currencyCode]" id="currencyCode" class="admin__control-select">
+                                        <option value="EUR">EUR</option>
+                                        <option value="USD" <?php echo $item->currencyCode
+                            == 'USD' ? 'selected' : ''; ?>>USD</option>
+                                    </select>
+                                </td>
+                                <td class="col-hs-code">
+                                    <div class="admin__field-control">
+                                        <input name="cn22[items][<?php echo $counter; ?>][hsCode]" id="hscode"
+                                               value="<?php echo $item->hsCode; ?>" class="admin__control-text" />
+                                    </div>
+                                </td>
+                                <td class="col-weight">
+                                    <div class="admin__field-control">
+                                        <input name="cn22[items][<?php echo $counter; ?>][weight]" type="number" value="<?php echo $item->weight; ?>"
+                                               step="0.01" id="weight" class="admin__control-text"
+                                               data-validate='{"required":true}' />
+                                    </div>
+                                </td>
+                                <td class="col-quantity">
+                                    <div class="admin__field-control">
+                                        <input name="cn22[items][<?php echo $counter; ?>][quantity]" type="number"
+                                               value="<?php echo intval($item->quantity); ?>"
+                                               step="1" id="quantity" class="admin__control-text"
+                                               data-validate='{"required":true}'>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+        <?php endif; ?>
+        <?php if ($CN23): ?>
+            <div class="tab" data-tab="4" style="margin-top: 20px">
+            <h2><?php echo __('CN23 Declaration'); ?></h2>
+            <div class="admin__field">
+                <label for="parcel_type" class="admin__field-label">
+                    <?php echo __('Parcel Type'); ?> <span style="color:red">*</span>
+                </label>
+                <div class="admin__field-control">
+                    <select name="cn23[parcel_type]" id="parcel_type" class="admin__control-select">
+                        <option value="Sell">Sell</option>
+                        <option value="Gift" <?php echo $CN23->getParcelType() == 'Gift' ? 'selected' : ''; ?>>Gift</option>
+                        <option value="Document" <?php echo $CN23->getParcelType() == 'Document' ? 'selected' : ''; ?>>Document</option>
+                        <option value="Sample" <?php echo $CN23->getParcelType() == 'Sample' ? 'selected' : ''; ?>>Sample</option>
+                        <option value="Return" <?php echo $CN23->getParcelType() == 'Return' ? 'selected' : ''; ?>>Return</option>
+                        <option value="Other" <?php echo $CN23->getParcelType() == 'Other' ? 'selected' : ''; ?>>Other</option>
+                    </select>
+                </div>
+            </div>
+            <div class="admin__field">
+                <label for="exporter_customs_code" class="admin__field-label">
+                    <?php echo __('Exporter Customs Code'); ?>
+                </label>
+                <div class="admin__field-control">
+                    <input name="cn23[exporter_customs_code]"
+                           value="<?php echo $CN23->getExporterCustomsCode(); ?>"
+                           id="exporter_customs_code" class="admin__control-text" />
+                </div>
+            </div>
+            <div class="admin__field">
+                <label for="license" class="admin__field-label">
+                    <?php echo __('License'); ?>
+                </label>
+                <div class="admin__field-control">
+                    <input name="cn23[license]"
+                           value="<?php echo $CN23->getLicense(); ?>"
+                           id="license" class="admin__control-text" />
+                </div>
+            </div>
+            <div class="admin__field">
+                <label for="certificate" class="admin__field-label">
+                    <?php echo __('Certificate'); ?>
+                </label>
+                <div class="admin__field-control">
+                    <input name="cn23[certificate]"
+                           value="<?php echo $CN23->getCertificate(); ?>"
+                           id="certificate" class="admin__control-text" />
+                </div>
+            </div>
+            <div class="admin__field">
+                <label for="invoice" class="admin__field-label">
+                    <?php echo __('Invoice'); ?>
+                </label>
+                <div class="admin__field-control">
+                    <input name="cn23[invoice]"
+                           value="<?php echo $CN23->getInvoice(); ?>"
+                           id="invoice" class="admin__control-text" />
+                </div>
+            </div>
+            <div class="admin__field">
+                <label for="invoice" class="admin__field-label">
+                    <?php echo __('Notes'); ?>
+                </label>
+                <div class="admin__field-control">
+                <textarea name="cn23[notes]" id="parcel_description"
+                          class="admin__control-textarea"><?php echo $CN23->getNotes(); ?></textarea>
+                </div>
+            </div>
+            <div class="admin__field">
+                <label for="faiilure_instructions" class="admin__field-label">
+                    <?php echo __('Failure Instruction'); ?>
+                </label>
+                <div class="admin__field-control">
+                    <select name="cn23[failure_instruction]" id="parcel_type" class="admin__control-select">
+                        <option value="RETURN_TO_SENDER_NON_PRIORITY"
+                            <?php echo $CN23->getFailureInstruction() == 'RETURN_TO_SENDER_NON_PRIORITY' ? 'selected' : ''; ?>
+                        >RETURN_TO_SENDER_NON_PRIORITY</option>
+                        <option value="RETURN_TO_SENDER_PRIORITY"
+                            <?php echo $CN23->getFailureInstruction() == 'RETURN_TO_SENDER_PRIORITY' ? 'selected' : ''; ?>
+                        >RETURN_TO_SENDER_PRIORITY</option>
+                        <option value="TREAT_AS_ABANDONED"
+                            <?php echo $CN23->getFailureInstruction() == 'TREAT_AS_ABANDONED' ? 'selected' : ''; ?>
+                        >TREAT_AS_ABANDONED</option>
+                    </select>
+                </div>
+            </div>
+            <div class="admin__field">
+                <label for="importer_code" class="admin__field-label">
+                    <?php echo __('Importer Code'); ?>
+                </label>
+                <div class="admin__field-control">
+                    <input name="cn23[importer_code]"
+                           value="<?php echo $CN23->getImporterCode(); ?>"
+                           id="importer_code" class="admin__control-text" />
+                </div>
+            </div>
+            <div class="admin__field">
+                <label for="importer_customs_code" class="admin__field-label">
+                    <?php echo __('Importer Customs Code'); ?>
+                </label>
+                <div class="admin__field-control">
+                    <input name="cn23[importer_customs_code]"
+                           value="<?php echo $CN23->getImporterCustomsCode(); ?>"
+                           id="importer_customs_code" class="admin__control-text" />
+                </div>
+            </div>
+            <div class="admin__field">
+                <label for="importer_email" class="admin__field-label">
+                    <?php echo __('Importer Email'); ?>
+                </label>
+                <div class="admin__field-control">
+                    <input name="cn23[importer_email]"
+                           value="<?php echo $CN23->getImporterEmail(); ?>"
+                           id="importer_email" class="admin__control-text" />
+                </div>
+            </div>
+            <div class="admin__field">
+                <label for="importer_fax" class="admin__field-label">
+                    <?php echo __('Importer Fax'); ?>
+                </label>
+                <div class="admin__field-control">
+                    <input name="cn23[importer_fax]"
+                           value="<?php echo $CN23->getImporterFax(); ?>"
+                           id="importer_fax" class="admin__control-text" />
+                </div>
+            </div>
+            <div class="admin__field">
+                <label for="importer_phone" class="admin__field-label">
+                    <?php echo __('Importer Phone'); ?>
+                </label>
+                <div class="admin__field-control">
+                    <input name="cn23[importer_phone]"
+                           value="<?php echo $CN23->getImporterPhone(); ?>"
+                           id="importer_phone" class="admin__control-text" />
+                </div>
+            </div>
+            <div class="admin__field">
+                <label for="importer_tax_code" class="admin__field-label">
+                    <?php echo __('Importer Tax Code'); ?>
+                </label>
+                <div class="admin__field-control">
+                    <input name="cn23[importer_tax_code]"
+                           value="<?php echo $CN23->getImporterTaxCode(); ?>"
+                           id="importer_tax_code" class="admin__control-text" />
+                </div>
+            </div>
+            <div class="admin__field">
+                <label for="importer_vat_code" class="admin__field-label">
+                    <?php echo __('Importer Vat Code'); ?>
+                </label>
+                <div class="admin__field-control">
+                    <input name="cn23[importer_vat_code]"
+                           value="<?php echo $CN23->getImporterVatCode(); ?>"
+                           id="importer_vat_code" class="admin__control-text" />
+                </div>
+            </div>
+            <div class="admin__field">
+                <label for="description" class="admin__field-label">
+                    <?php echo __('Description'); ?>
+                </label>
+                <div class="admin__field-control">
+                <textarea name="cn23[description]" id="description"
+                          class="admin__control-textarea"><?php echo $CN23->getDescription(); ?></textarea>
+                </div>
+            </div>
+            <section class="admin__page-section">
+                <div class="admin__page-section-title">
+                    <span class="title"><?php echo __('Parcel Items') ?></span>
+                </div>
+                <div class="admin__table-wrapper">
+                    <table class="data-table admin__table-primary edit-order-table">
+                        <thead>
+                        <tr class="headings">
+                            <th class="col-summary">
+                            <span>
+                                <?php echo __('Summary'); ?> <span style="color:red">*</span>
+                            </span>
+                            </th>
+                            <th class="col-amount">
+                            <span>
+                                <?php echo __('Amount'); ?> <span style="color:red">*</span>
+                            </span>
+                            </th>
+                            <th class="col-country">
+                            <span>
+                                <?php echo __('Country of Origin'); ?> <span style="color:red">*</span>
+                            </span>
+                            </th>
+                            <th class="col-currency">
+                            <span>
+                                <?php echo __('Currency'); ?> <span style="color:red">*</span>
+                            </span>
+                            </th>
+                            <th class="col-hs-code">
+                                <span><?php echo __('HS Item Number'); ?></span>
+                            </th>
+                            <th class="col-weight">
+                            <span>
+                                <?php echo __('Weight'); ?> (g) <span style="color:red">*</span>
+                            </span>
+                            </th>
+                            <th class="col-quantity">
+                            <span>
+                                <?php echo __('Quantity'); ?> <span style="color:red">*</span>
+                            </span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody class="even">
+                        <?php /* @var Product $item */ ?>
+                        <?php $counter = -1;
+            foreach ($CN23Parts as $item): $counter++; ?>
+                            <tr>
+                                <td class="col-summary">
+                                    <div class="admin__field-control">
+                                        <input name="cn23[items][<?php echo $counter; ?>][summary]" type="text" id="summary"
+                                               class="admin__control-text" value="<?php echo $item->summary; ?>"
+                                               data-validate='{"required":true}' />
+                                    </div>
+                                </td>
+                                <td class="col-amount">
+                                    <div class="admin__field-control">
+                                        <input name="cn23[items][<?php echo $counter; ?>][amount]" type="number"
+                                               value="<?php echo number_format($item->amount, 2); ?>"
+                                               step="0.01" id="amount" class="admin__control-text"
+                                               data-validate='{"required":true}' />
+                                    </div>
+                                </td>
+                                <td class="col-country" style="max-width: 155px">
+                                    <select name="cn23[items][<?php echo $counter; ?>][countryCode]" id="countryCode" class="admin__control-select">
+                                        <?php foreach ($block->getData('countries')->availableCountries() as $country): ?>
+                                                <option <?php echo $country [ 'value' ] === 'LT' ? 'selected' : ''; ?>
+                                                        value="<?php echo $country [ 'value' ] ?>">
+                                                    <?php echo $country [ 'label' ] ?>
+                                                </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </td>
+                                <td class="col-currency">
+                                    <select name="cn23[items][<?php echo $counter; ?>][currencyCode]" id="currencyCode" class="admin__control-select">
+                                        <option value="EUR">EUR</option>
+                                        <option value="USD" <?php echo $item->currencyCode
+                            == 'USD' ? 'selected' : ''; ?>>USD</option>
+                                    </select>
+                                </td>
+                                <td class="col-hs-code">
+                                    <div class="admin__field-control">
+                                        <input name="cn23[items][<?php echo $counter; ?>][hsCode]" id="hscode"
+                                               value="<?php echo $item->hsCode; ?>" class="admin__control-text" />
+                                    </div>
+                                </td>
+                                <td class="col-weight">
+                                    <div class="admin__field-control">
+                                        <input name="cn23[items][<?php echo $counter; ?>][weight]" type="number" value="<?php echo $item->weight; ?>"
+                                               step="0.01" id="weight" class="admin__control-text"
+                                               data-validate='{"required":true}' />
+                                    </div>
+                                </td>
+                                <td class="col-quantity">
+                                    <div class="admin__field-control">
+                                        <input name="cn23[items][<?php echo $counter; ?>][quantity]" type="number"
+                                               value="<?php echo intval($item->quantity); ?>"
+                                               step="1" id="quantity" class="admin__control-text"
+                                               data-validate='{"required":true}'>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+        <?php endif; ?>
+    </form>
+</div>
+
+
+<script>
+    let LP_LPShipping_Shipment_Modal = null;
+    require(
+        [
+            'jquery',
+            'Magento_Ui/js/modal/modal'
+        ],
+        function (
+            $,
+            modal
+        ) {
+            let options = {
+                type: 'slide',
+                responsive: true,
+                innerScroll: true,
+                title: '<div style="display:flex; align-items:center;">' +
+                    '<img src="<?php echo $this->getViewFileUrl('LP_LPShipping::images/logo.svg'); ?>" /> &nbsp;' + $.mage.__('Shipment Details') + '</div>',
+                modalClass: 'eshoper-lpshipping-shipment-modal',
+                buttons: [
+                    {
+                        text: $.mage.__('Close'),
+                        click: function () {
+                            this.closeModal();
+                        }
+                    },
+                    {
+                        text: $.mage.__('Save'),
+                        class: 'action action-primary lpbutton-noicon lpaction-save',
+                        click: function() {
+                            let shipmentForm = $('#eshoper-lpshipping-shipment-modal form');
+                            shipmentForm.append($('<input>', {
+                                'name': 'form_key',
+                                'value': window.FORM_KEY,
+                                'type': 'hidden'
+                            }));
+                            shipmentForm.submit();
+                        }
+                    }
+                ]
+            };
+
+            modal(options, $('#eshoper-lpshipping-shipment-modal'));
+
+            LP_LPShipping_Shipment_Modal = $("#eshoper-lpshipping-shipment-modal");
+
+            $('#eshoper-lpshipping-shipment-modal .lpshipping-list-sizes-item-size').on('click', function () {
+                $('#eshoper-lpshipping-shipment-modal .lpshipping-list-sizes-item-size.active').removeClass('active');
+                $(this).addClass('active');
+            });
+
+            $('#eshoper-lpshipping-shipment-modal .lpshipping-list-shipfrom-item-label').on('click', function () {
+                $('#eshoper-lpshipping-shipment-modal .lpshipping-list-shipfrom-item-label.active').removeClass('active');
+                $(this).addClass('active');
+
+                if ($(this).children('input').val() === "EBIN") {
+                    $('#eshoper-lpshipping-shipment-modal .lpshipping-list-sizes').addClass('disabled');
+                    $('#eshoper-lpshipping-shipment-modal .lpshipping-list-sizes-item-size.active').removeClass('active');
+                    $('#eshoper-lpshipping-shipment-modal .lpshipping-list-sizes input').prop('checked', false);
+                } else {
+                    $('#eshoper-lpshipping-shipment-modal .lpshipping-list-sizes').removeClass('disabled');
+                    $('#eshoper-lpshipping-shipment-modal .lpshipping-list-sizes input[value="<?php echo $packageSize; ?>"]')
+                        .prop('checked', true).parent().addClass('active');
+                }
+            });
+
+            $('#eshoper-lpshipping-shipment-modal .lpshipping-shipment-nav .step').on('click', function () {
+                $('#eshoper-lpshipping-shipment-modal .lpshipping-shipment-nav .step').removeClass('active');
+                $(this).addClass('active');
+
+                $('#eshoper-lpshipping-shipment-modal .tab').removeClass('tab-active');
+                $('#eshoper-lpshipping-shipment-modal .tab[data-tab="' + $(this).data('tab') + '"]').addClass('tab-active');
+            });
+        }
+    );
+</script>
+<style>
+    .lpshipping-list-sizes.disabled .lpshipping-list-sizes-item-size {
+        pointer-events: none;
+        opacity: 0.6;
+    }
+
+    .lpbutton, .lpbutton-noicon {
+        color: black !important;
+        border-color: black !important;
+        background-color: #ffdd00 !important;
+    }
+
+    .lpbutton.hidden {
+        display: none !important;
+    }
+
+    .lpbutton span:before {
+        content: "";
+        display: inline-block;
+        background: url(
+            <?php echo $this->getViewFileUrl('LP_LPShipping::images/icon.svg'); ?>
+        ) no-repeat;
+        width: 60px;
+        background-size: contain;
+        height: 20px;
+        position: relative;
+        top: 6px;
+        right: 5px;
+    }
+
+    .lpbutton:after {
+        border-color: #000000 transparent transparent transparent !important;
+    }
+
+    .eshoper-lpshipping-shipment-modal {
+        width: 70%;
+        left: inherit;
+        right: 0;
+    }
+
+    .lpshipping-list-sizes, .lpshipping-list-shipfrom {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .lpshipping-list-sizes-item, .lpshipping-list-shipfrom-item {
+        list-style: none;
+    }
+
+    .lpshipping-list-sizes-item-size, .lpshipping-list-shipfrom-item-label {
+        vertical-align: middle;
+        padding: 15px;
+        cursor: pointer;
+        position: relative;
+        background-color: #f5f5f5;
+        box-shadow: 0 1px 0 0 #ccc;
+        border-radius: 3px;
+        max-width: 145px;
+        display: flex;
+        flex-wrap: wrap;
+        min-height: 110px;
+        min-width: 145px;
+        margin-right: 10px;
+        margin-top: 10px;
+    }
+
+    .lpshipping-list-sizes-item-size:hover, .lpshipping-list-sizes-item-size.active,
+       .lpshipping-list-shipfrom-item-label:hover, .lpshipping-list-shipfrom-item-label.active {
+        background-color: #fcde05;
+        box-shadow: 0 1px 0 0 #e3c905;
+    }
+
+    .lpshipping-shipment-nav .step.active {
+        background-color: #fcde05;
+        box-shadow: 0 1px 0 0 #e3c905;
+    }
+
+    .lpshipping-list-sizes-item-size span, .lpshipping-list-shipfrom-item-label span {
+        width: 100%;
+    }
+
+    .lpshipping-list-sizes-item-size img, .lpshipping-list-shipfrom-item-label img {
+        padding-bottom: 10px;
+    }
+
+    .lpshipping-list-sizes-item-size input, .lpshipping-list-shipfrom-item-label input {
+        display: none;
+    }
+
+    .color-gray {
+        color: gray;
+    }
+
+    .additional-options {
+        border-top: 1px solid #e4e4e4;
+        margin-top: 20px;
+        padding: 20px 0px 20px 0px;
+    }
+
+    .lpshipping-shipment-nav .step {
+        cursor: pointer;
+    }
+
+    #eshoper-lpshipping-shipment-modal .tab {
+        display: none;
+    }
+
+    #eshoper-lpshipping-shipment-modal .tab.tab-active {
+        display: block;
+    }
+</style>
